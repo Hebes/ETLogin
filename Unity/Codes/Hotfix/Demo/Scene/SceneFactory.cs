@@ -10,6 +10,13 @@ namespace ET
 			zoneScene.AddComponent<CurrentScenesComponent>();
             zoneScene.AddComponent<ObjectWait>();
             zoneScene.AddComponent<PlayerComponent>();
+
+            //账号信息添加
+            zoneScene.AddComponent<AccountInofComponent>();
+            //服务器信息添加
+            zoneScene.AddComponent<ServerInfosComponent>();
+            //角色信息添加
+            zoneScene.AddComponent<RoleInfosComponent>();
             
             Game.EventSystem.Publish(new EventType.AfterCreateZoneScene() {ZoneScene = zoneScene});
             return zoneScene;
@@ -23,7 +30,5 @@ namespace ET
             Game.EventSystem.Publish(new EventType.AfterCreateCurrentScene() {CurrentScene = currentScene});
             return currentScene;
         }
-        
-        
     }
 }

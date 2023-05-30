@@ -15,7 +15,6 @@ namespace ET
 		  {
 			  self.OnEnterMapClickHandler().Coroutine();
 		  });
-		
 		}
 
 		public static void ShowWindow(this DlgLobby self, Entity contextData = null)

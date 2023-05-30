@@ -325,4 +325,63 @@ namespace ET
 
 	}
 
+// 服务器之间的相互通讯
+// 账号服务器发往登录中心服
+	[ResponseType(nameof(L2A_LoginAccountResponse))]
+	[Message(InnerOpcode.A2L_LoginAccountRequest)]
+	[ProtoContract]
+	public partial class A2L_LoginAccountRequest: Object, IActorRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(InnerOpcode.L2A_LoginAccountResponse)]
+	[ProtoContract]
+	public partial class L2A_LoginAccountResponse: Object, IActorResponse
+	{
+		[ProtoMember(1)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(2)]
+		public int Error { get; set; }
+
+		[ProtoMember(3)]
+		public string Message { get; set; }
+
+	}
+
+// 登录中心服务器发送到Gate服务器
+	[ResponseType(nameof(G2L_DisconnectGateUnitResponse))]
+	[Message(InnerOpcode.L2G_DisconnectGateUnitRequest)]
+	[ProtoContract]
+	public partial class L2G_DisconnectGateUnitRequest: Object, IActorRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(InnerOpcode.G2L_DisconnectGateUnitResponse)]
+	[ProtoContract]
+	public partial class G2L_DisconnectGateUnitResponse: Object, IActorResponse
+	{
+		[ProtoMember(1)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(2)]
+		public int Error { get; set; }
+
+		[ProtoMember(3)]
+		public string Message { get; set; }
+
+	}
+
 }

@@ -12,6 +12,15 @@ namespace ET
         public const int ResourcesLoader = 7;
         public const int LoadUIBaseWindows = 8;
 
+        //新增
+        public const int LoginAccount = 9;
+
+        public const int LogoutCenterLock = 10;
+        public const int GateLoginLock = 11;
+
+        public const int CreatRoleLock = 12;//玩家创建携程锁
+
+
         public const int Max = 100; // 这个必须最大
     }
 }

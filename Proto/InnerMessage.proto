@@ -154,3 +154,34 @@ message G2M_SessionDisconnect // IActorLocationMessage
 {
 	int32 RpcId = 90;
 }
+
+// 服务器之间的相互通讯
+// 账号服务器发往登录中心服
+//ResponseType L2A_LoginAccountResponse
+message A2L_LoginAccountRequest // IActorRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+
+message L2A_LoginAccountResponse // IActorResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}
+
+// 登录中心服务器发送到Gate服务器
+//ResponseType G2L_DisconnectGateUnitResponse
+message L2G_DisconnectGateUnitRequest // IActorRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+
+message G2L_DisconnectGateUnitResponse // IActorResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}

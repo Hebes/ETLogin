@@ -186,8 +186,30 @@ namespace ET
         }
 
         #endregion
-        
-  #region UI按钮事件
+
+        #region UI按钮事件
+
+        /// <summary> 新增方法,用于玩家频繁的网络请求限制 </summary>
+        private static bool isClicked=false;
+        public static void AddListenAsync(this Button button,Func<ETTask> action)
+        {
+            button.onClick.RemoveAllListeners();
+            async ETTask clickActionAsync()
+            {
+                isClicked=true;
+                //如果异常的话下面的Fale永远不会执行
+                //有异常的地方请在action等于的方法里面用try包裹
+                await action();
+                isClicked = false;
+            }
+
+            button.onClick.AddListener(() =>
+            {
+                if (isClicked) return;
+                clickActionAsync().Coroutine();
+            });
+        }
+
 
       public static void AddListenerAsyncWithId(this Button button, Func<int, ETTask> action,int id)
       { 
@@ -229,15 +251,9 @@ namespace ET
                
           button.onClick.AddListener(() =>
           {
-              if ( UIEventComponent.Instance == null)
-              {
-                  return;
-              }
+              if ( UIEventComponent.Instance == null) return;
 
-              if (UIEventComponent.Instance.IsClicked)
-              {
-                  return;
-              }
+              if (UIEventComponent.Instance.IsClicked) return;
                    
               clickActionAsync().Coroutine();
           });

@@ -36,6 +36,10 @@ namespace ET
             
             Game.Scene.AddComponent<NavmeshComponent, Func<string, byte[]>>(RecastFileReader.Read);
 
+            //数据库组件
+            Game.Scene.AddComponent<DBManagerComponent>();//添加[ComponentOf(typeof(Scene))]就不会报错了
+
+
             switch (Game.Options.AppType)
             {
                 case AppType.Server:

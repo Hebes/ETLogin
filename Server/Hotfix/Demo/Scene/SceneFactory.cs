@@ -1,5 +1,3 @@
-
-
 using System.Net;
 
 namespace ET
@@ -35,6 +33,15 @@ namespace ET
                     break;
                 case SceneType.Location:
                     scene.AddComponent<LocationComponent>();
+                    break;
+                case SceneType.Account://账号服务器
+                    scene.AddComponent<NetKcpComponent, IPEndPoint, int>(startSceneConfig.OuterIPPort, SessionStreamDispatcherType.SessionStreamDispatcherServerOuter);
+                    scene.AddComponent<TokenComponent>();
+                    scene.AddComponent<AccountSessionsComponent>();//新添加的顶号
+                    scene.AddComponent<ServerInfoManagerComponent>();//服务器列表
+                    break;
+                case SceneType.LoginCenter://账号中心服务器
+                    scene.AddComponent<LoginInfoRecordComponent>();
                     break;
             }
 
