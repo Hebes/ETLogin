@@ -177,6 +177,40 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Button E_ReRoleButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_ReRoleButton == null )
+     			{
+		    		this.m_E_ReRoleButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"EGBackGround/E_ReRole");
+     			}
+     			return this.m_E_ReRoleButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_ReRoleImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_ReRoleImage == null )
+     			{
+		    		this.m_E_ReRoleImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"EGBackGround/E_ReRole");
+     			}
+     			return this.m_E_ReRoleImage;
+     		}
+     	}
+
 		public UnityEngine.UI.Image EContentImage
      	{
      		get
@@ -240,6 +274,8 @@ namespace ET
 			this.m_EInputFieldNameInputField = null;
 			this.m_EInputFieldNameImage = null;
 			this.m_ERoleNameText = null;
+			this.m_E_ReRoleButton = null;
+			this.m_E_ReRoleImage = null;
 			this.m_EContentImage = null;
 			this.m_ERoleItemButton = null;
 			this.m_ERoleItemImage = null;
@@ -256,6 +292,8 @@ namespace ET
 		private UnityEngine.UI.InputField m_EInputFieldNameInputField = null;
 		private UnityEngine.UI.Image m_EInputFieldNameImage = null;
 		private UnityEngine.UI.Text m_ERoleNameText = null;
+		private UnityEngine.UI.Button m_E_ReRoleButton = null;
+		private UnityEngine.UI.Image m_E_ReRoleImage = null;
 		private UnityEngine.UI.Image m_EContentImage = null;
 		private UnityEngine.UI.Button m_ERoleItemButton = null;
 		private UnityEngine.UI.Image m_ERoleItemImage = null;

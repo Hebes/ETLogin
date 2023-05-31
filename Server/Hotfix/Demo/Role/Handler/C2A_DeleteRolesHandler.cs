@@ -40,10 +40,14 @@ namespace ET
                 using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.CreatRoleLock, request.AccountId))
                 {
                     var roleInfos = await DBManagerComponent.Instance.GetZoneDB(request.ServerId).
-                        Query<RoleInfo>(d => d.Id == request.RoleInfoId && d.ServerId == request.ServerId);
+                        Query<RoleInfo>(d => d.Id == request.RoleInfoId
+                        && d.ServerId == request.ServerId);
 
-                    //有角色了
-                    if (roleInfos == null && roleInfos.Count > 0)
+                    //var roleInfos = await DBManagerComponent.Instance.GetZoneDB(request.ServerId).
+                    //    Query<RoleInfo>(d => true);
+
+                    //没有角色
+                    if (roleInfos == null || roleInfos.Count <= 0)
                     {
                         response.Error = ErrorCode.ERR_RoleNotExistError;
                         reply();

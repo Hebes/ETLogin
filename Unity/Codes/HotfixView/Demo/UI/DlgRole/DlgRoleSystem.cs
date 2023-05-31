@@ -13,12 +13,12 @@ namespace ET
             self.View.E_CreatRoleButton.AddListenerAsync(self.OnCreatRoleButton);
             self.View.E_DelectRoleButton.AddListenerAsync(self.OnDelectRoleButton);
             self.View.E_StartGameButton.AddListener(self.OnStartGameButton);
+            self.View.E_ReRoleButton.AddListenerAsync(self.OnReRoleButtonAsync);
         }
 
         public static void ShowWindow(this DlgRole self, Entity contextData = null)
         {
-            self.OnClearChild();
-            self.OnShowChild();
+            self.OnShowRole();
         }
 
         /// <summary> 删除子物体 </summary>
@@ -51,6 +51,12 @@ namespace ET
                 });
             }
         }
+        /// <summary> 显示角色,发送请求 </summary>
+        private static void OnShowRole(this DlgRole self)
+        {
+            self.OnClearChild();
+            self.OnShowChild();
+        }
 
         /// <summary> 创建角色 </summary>
         public static async ETTask OnCreatRoleButton(this DlgRole self)
@@ -72,7 +78,7 @@ namespace ET
                     Log.Debug(errorCode.ToString());
                     return;
                 }
-                self.OnShowChild();
+                self.OnShowRole();
                 self.View.EInputFieldNameInputField.text = string.Empty;
             }
             catch (Exception e)
@@ -99,14 +105,16 @@ namespace ET
                     return;
                 }
 
-                //删除角色
-                for (int i = 0; i < self.View.EContentImage.transform.childCount; i++)
-                {
+                ////删除角色
+                //for (int i = 0; i < self.View.EContentImage.transform.childCount; i++)
+                //{
 
-                    bool isEqual = self.View.EContentImage.transform.GetChild(i).Find("Name").GetComponent<Text>().text == self.roleInfo.Name;
-                    if (isEqual)
-                        GameObject.Destroy(self.View.EContentImage.transform.GetChild(i).gameObject);
-                }
+                //    bool isEqual = self.View.EContentImage.transform.GetChild(i).Find("Name").GetComponent<Text>().text == self.roleInfo.Name;
+                //    if (isEqual)
+                //        GameObject.Destroy(self.View.EContentImage.transform.GetChild(i).gameObject);
+                //}
+
+                self.OnShowRole();
                 //清理不需要的赋值
                 self.ZoneScene().GetComponent<RoleInfosComponent>().CurrentRoleId = 0;
                 self.roleInfo = null;
@@ -121,6 +129,18 @@ namespace ET
         public static void OnStartGameButton(this DlgRole self)
         {
 
+        }
+        /// <summary> 刷新游戏角色,发送请求 </summary>
+        public static async ETTask OnReRoleButtonAsync(this DlgRole self)
+        {
+            //获取角色列表
+            int errorCode = await LoginHelper.GetRoles(self.ZoneScene());
+            if (errorCode != ErrorCode.ERR_Success)
+            {
+                Log.Error(errorCode.ToString());
+                return;
+            }
+            self.OnShowRole();
         }
     }
 }

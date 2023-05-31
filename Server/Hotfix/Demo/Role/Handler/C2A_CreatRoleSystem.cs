@@ -45,11 +45,12 @@ namespace ET
             {
                 using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.CreatRoleLock, request.AccountId))
                 {
-                    var roleInfos = await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Query<RoleInfo>(d =>
-                    d.Name == request.Name && d.ServerId == request.ServerId);
+                    var roleInfos = await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).
+                        Query<RoleInfo>(d => d.Name == request.Name 
+                        && d.ServerId == request.ServerId);
 
-                    //有角色了
-                    if (roleInfos != null && roleInfos.Count > 0)
+                    //有角色
+                    if (roleInfos == null || roleInfos.Count > 0)
                     {
                         response.Error = ErrorCode.ERR_RoleNameSameError;
                         reply();
