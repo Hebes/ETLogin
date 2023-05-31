@@ -38,5 +38,10 @@ namespace ET
         public const int ERR_RoleNameSameError = 200010;
         /// <summary> 游戏角色不存在 </summary>
         public const int ERR_RoleNotExistError = 200012;
+
+        /// <summary> 连接Gate令牌错误 </summary>
+        public const int ERR_ConnectGateKeyError = 200013;
+        /// <summary> 请求的场景错误 </summary>
+        public const int ERR_RequestSceneTypeError = 200014;
     }
 }

@@ -23,5 +23,12 @@ namespace ET
 
             return zoneGates[n];
         }
+        /// <summary> 获取网关负载均衡服务器 </summary>
+        public static StartSceneConfig GetRealm(int zone)
+        {
+            StartSceneConfig zoneRealm = StartSceneConfigCategory.Instance.Realms[zone];
+
+            return zoneRealm;
+        }
     }
 }

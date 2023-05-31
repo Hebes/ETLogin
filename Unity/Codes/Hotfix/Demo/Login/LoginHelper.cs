@@ -38,8 +38,8 @@ namespace ET
             zoneScene.GetComponent<SessionComponent>().Session.AddComponent<PingComponent>();//心跳包检测
 
             //保存令牌等
-            zoneScene.GetComponent<AccountInofComponent>().Token = a2C_LoginAccount.Token;
-            zoneScene.GetComponent<AccountInofComponent>().AccountId = a2C_LoginAccount.AccountId;
+            zoneScene.GetComponent<AccountInfoComponent>().Token = a2C_LoginAccount.Token;
+            zoneScene.GetComponent<AccountInfoComponent>().AccountId = a2C_LoginAccount.AccountId;
 
             return ErrorCode.ERR_Success;
         }
@@ -53,8 +53,8 @@ namespace ET
             {
                 a2C_GetServerInfos = (A2C_GetServerInfos)await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_GetServerInfos()
                 {
-                    AccountId = zoneScene.GetComponent<AccountInofComponent>().AccountId,
-                    Token = zoneScene.GetComponent<AccountInofComponent>().Token,
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
                 });
             }
             catch (Exception e)
@@ -89,8 +89,8 @@ namespace ET
             {
                 a2C_CreatRole = (A2C_CreatRole)await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_CreatRole()
                 {
-                    AccountId = zoneScene.GetComponent<AccountInofComponent>().AccountId,
-                    Token = zoneScene.GetComponent<AccountInofComponent>().Token,
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
                     Name = name,
                     ServerId = zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId,
                 });
@@ -124,8 +124,8 @@ namespace ET
             {
                 a2C_GetRoles = (A2C_GetRoles)await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_GetRoles()
                 {
-                    AccountId = zoneScene.GetComponent<AccountInofComponent>().AccountId,
-                    Token = zoneScene.GetComponent<AccountInofComponent>().Token,
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
                     ServerId = zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId,
                 });
             }
@@ -161,10 +161,10 @@ namespace ET
             {
                 a2C_DeleteRoles = (A2C_DeleteRoles)await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_DeleteRoles()
                 {
-                    AccountId = zoneScene.GetComponent<AccountInofComponent>().AccountId,
-                    Token = zoneScene.GetComponent<AccountInofComponent>().Token,
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
                     RoleInfoId = zoneScene.GetComponent<RoleInfosComponent>().CurrentRoleId,
-                    ServerId= zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId,
+                    ServerId = zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId,
                 });
             }
             catch (Exception e)
@@ -187,6 +187,80 @@ namespace ET
             zoneScene.GetComponent<RoleInfosComponent>().roleInfosList.RemoveAt(index);
 
             return ErrorCode.ERR_Success;
+        }
+
+        /// <summary> 获取网关服务器连接的令牌等 </summary>
+        public static async ETTask<int> GetRelamKey(Scene zoneScene)
+        {
+            A2C_GetRealmKey a2C_GetRealmKey = null;
+
+            try
+            {
+                a2C_GetRealmKey = (A2C_GetRealmKey)await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_GetRealmKey()
+                {
+                    Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    ServerId = zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId,
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+                return ErrorCode.ERR_NetWorkError;
+            }
+
+            if (a2C_GetRealmKey.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(a2C_GetRealmKey.Error.ToString());
+                return a2C_GetRealmKey.Error;
+            }
+
+            //保存网关服务器的信息
+            zoneScene.GetComponent<AccountInfoComponent>().RealmKey = a2C_GetRealmKey.RealmKey;
+            zoneScene.GetComponent<AccountInfoComponent>().RealmAddress = a2C_GetRealmKey.RealmAddress;
+            zoneScene.GetComponent<SessionComponent>().Session.Dispose();
+
+            return ErrorCode.ERR_Success;
+        }
+
+        /// <summary> 登录游戏 </summary>
+        public static async ETTask<int> EnterGame(Scene zoneScene)
+        {
+            string realmAddress = zoneScene.GetComponent<AccountInfoComponent>().RealmAddress;
+
+            //1. 连接Realm,获取分配的Gate
+            R2C_LoginRealm r2C_LoginRealm;
+
+            Session session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(realmAddress));
+            try
+            {
+                r2C_LoginRealm = (R2C_LoginRealm)await session.Call(new C2R_LoginRealm()
+                {
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    RealmTokenKey = zoneScene.GetComponent<AccountInfoComponent>().RealmKey,
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+                session?.Dispose();
+                return ErrorCode.ERR_NetWorkError;
+            }
+            session?.Dispose();
+             
+            if (r2C_LoginRealm.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(r2C_LoginRealm.Error.ToString());
+                return r2C_LoginRealm.Error;
+            }
+
+            Log.Warning($"GateAddress : {r2C_LoginRealm.GateAddress}");
+            Session gateSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(r2C_LoginRealm.GateAddress));
+            gateSession.AddComponent<PingComponent>();
+            zoneScene.GetComponent<SessionComponent>().Session = gateSession;
+
+            //2. 开始连接Gate
+            await ETTask.CompletedTask;
         }
     }
 }

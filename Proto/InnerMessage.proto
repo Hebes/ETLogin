@@ -185,3 +185,37 @@ message G2L_DisconnectGateUnitResponse // IActorResponse
 	int32 Error = 2;
 	string Message = 3;
 }
+
+// 获取网关服务器
+//ResponseType R2A_GetRealmKey
+message A2R_GetRealmKey // IActorRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+
+message R2A_GetRealmKey // IActorResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+
+	string RealmKey = 1;
+}
+
+// 同Gate请求一个key,客户端可以拿着这个Key请求gate
+//ResponseType G2R_GetLoginGateKey
+message R2G_GetLoginGateKey // IActorRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+
+message G2R_GetLoginGateKey // IActorResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+
+	string GateSessionKey = 1;
+}

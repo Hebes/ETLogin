@@ -12,7 +12,7 @@ namespace ET
             zoneScene.AddComponent<PlayerComponent>();
 
             //账号信息添加
-            zoneScene.AddComponent<AccountInofComponent>();
+            zoneScene.AddComponent<AccountInfoComponent>();
             //服务器信息添加
             zoneScene.AddComponent<ServerInfosComponent>();
             //角色信息添加

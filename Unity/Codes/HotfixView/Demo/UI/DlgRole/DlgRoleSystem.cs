@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ namespace ET
         {
             self.View.E_CreatRoleButton.AddListenerAsync(self.OnCreatRoleButton);
             self.View.E_DelectRoleButton.AddListenerAsync(self.OnDelectRoleButton);
-            self.View.E_StartGameButton.AddListener(self.OnStartGameButton);
+            self.View.E_StartGameButton.AddListenerAsync(self.OnStartGameButtonAsync);
             self.View.E_ReRoleButton.AddListenerAsync(self.OnReRoleButtonAsync);
         }
 
@@ -89,7 +90,6 @@ namespace ET
         /// <summary> 删除角色 </summary>
         public static async ETTask OnDelectRoleButton(this DlgRole self)
         {
-
             if (self.ZoneScene().GetComponent<RoleInfosComponent>().CurrentRoleId == 0)
             {
                 Log.Error("请选择需要删除的角色");
@@ -105,15 +105,6 @@ namespace ET
                     return;
                 }
 
-                ////删除角色
-                //for (int i = 0; i < self.View.EContentImage.transform.childCount; i++)
-                //{
-
-                //    bool isEqual = self.View.EContentImage.transform.GetChild(i).Find("Name").GetComponent<Text>().text == self.roleInfo.Name;
-                //    if (isEqual)
-                //        GameObject.Destroy(self.View.EContentImage.transform.GetChild(i).gameObject);
-                //}
-
                 self.OnShowRole();
                 //清理不需要的赋值
                 self.ZoneScene().GetComponent<RoleInfosComponent>().CurrentRoleId = 0;
@@ -126,9 +117,36 @@ namespace ET
             }
         }
         /// <summary> 开始游戏 </summary>
-        public static void OnStartGameButton(this DlgRole self)
+        public static async ETTask OnStartGameButtonAsync(this DlgRole self)
         {
+            if (self.ZoneScene().GetComponent<RoleInfosComponent>().CurrentRoleId == 0)
+            {
+                Log.Error("请选择需要删除的角色");
+                return;
+            }
 
+            try
+            {
+                //请求网关地址
+                int errorCode = await LoginHelper.GetRelamKey(self.ZoneScene());
+                if (errorCode != ErrorCode.ERR_Success)
+                {
+                    Log.Debug(errorCode.ToString());
+                    return;
+                }
+
+                //登录游戏
+                errorCode = await LoginHelper.EnterGame(self.ZoneScene());
+                if (errorCode != ErrorCode.ERR_Success)
+                {
+                    Log.Debug(errorCode.ToString());
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Debug(e.ToString());
+            }
         }
         /// <summary> 刷新游戏角色,发送请求 </summary>
         public static async ETTask OnReRoleButtonAsync(this DlgRole self)

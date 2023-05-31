@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace ET
 {
-    public class AccountInfoComponentAwakeSystem : AwakeSystem<AccountInofComponent>
+    public class AccountInfoComponentAwakeSystem : AwakeSystem<AccountInfoComponent>
     {
-        public override void Awake(AccountInofComponent self)
+        public override void Awake(AccountInfoComponent self)
         {
             self.Token  =string.Empty;
             self.AccountId = 0;
         }
     }
 
-    public class AccountInfoComponentDestroySystem : DestroySystem<AccountInofComponent>
+    public class AccountInfoComponentDestroySystem : DestroySystem<AccountInfoComponent>
     {
-        public override void Destroy(AccountInofComponent self)
+        public override void Destroy(AccountInfoComponent self)
         {
 
         }

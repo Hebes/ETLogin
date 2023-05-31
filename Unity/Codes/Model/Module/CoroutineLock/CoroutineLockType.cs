@@ -20,6 +20,9 @@ namespace ET
 
         public const int CreatRoleLock = 12;//玩家创建携程锁
 
+        public const int LoginRealm = 13;//登录Realm锁
+        public const int LoginGate = 14;//登录Gate锁
+
 
         public const int Max = 100; // 这个必须最大
     }
