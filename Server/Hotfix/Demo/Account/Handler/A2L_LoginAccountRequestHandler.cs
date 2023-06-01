@@ -22,7 +22,7 @@ namespace ET
 
                 //为啥使用MessageHelper.CallActor而不用ActorMessageSenderComponent.Instance.Call
                 //主要原因:好看
-                var g2LDisconnectGateUnitResponse = await MessageHelper.CallActor(gateConfig.InstanceId, new L2G_DisconnectGateUnitRequest()
+                var g2LDisconnectGateUnitResponse = (G2L_DisconnectGateUnitResponse)await MessageHelper.CallActor(gateConfig.InstanceId, new L2G_DisconnectGateUnitRequest()
                 {
                     AccountId = accountId,
                 });

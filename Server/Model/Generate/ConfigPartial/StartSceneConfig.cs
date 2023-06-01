@@ -17,6 +17,9 @@ namespace ET
 
         public StartSceneConfig LocationConfig;
 
+        //************************************登录中心服配置
+        public StartSceneConfig loginCenterConfig;
+
         public List<StartSceneConfig> Robots = new List<StartSceneConfig>();
 
         public List<StartSceneConfig> GetByProcess(int process)
@@ -55,6 +58,10 @@ namespace ET
                         //************************************
                     case SceneType.Realm:
                         this.Realms.Add(startSceneConfig.Zone, startSceneConfig);
+                        break;
+                    //************************************登录中心服
+                    case SceneType.LoginCenter:
+                        this.loginCenterConfig = startSceneConfig;
                         break;
                 }
             }

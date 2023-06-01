@@ -247,7 +247,7 @@ namespace ET
                 return ErrorCode.ERR_NetWorkError;
             }
             session?.Dispose();
-             
+
             if (r2C_LoginRealm.Error != ErrorCode.ERR_Success)
             {
                 Log.Error(r2C_LoginRealm.Error.ToString());
@@ -260,7 +260,53 @@ namespace ET
             zoneScene.GetComponent<SessionComponent>().Session = gateSession;
 
             //2. 开始连接Gate
-            await ETTask.CompletedTask;
+            G2C_LoginGameGate g2C_LoginGameGate = null;
+
+            try
+            {
+                g2C_LoginGameGate = (G2C_LoginGameGate)await gateSession.Call(new C2G_LoginGameGate()
+                {
+                    Key = r2C_LoginRealm.GateSessionKey,
+                    Account = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    RoleId = zoneScene.GetComponent<RoleInfosComponent>().CurrentRoleId,
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+                zoneScene.GetComponent<SessionComponent>().Session?.Dispose();
+                return ErrorCode.ERR_NetWorkError;
+            }
+
+            if (g2C_LoginGameGate.Error != ErrorCode.ERR_Success)
+            {
+                zoneScene.GetComponent<SessionComponent>().Session?.Dispose();
+                return g2C_LoginGameGate.Error;
+            }
+
+            Log.Debug("登录Gate成功!");
+
+            //3. 角色正式请求进入游戏逻辑服
+            G2C_EnterGame g2C_EnterGame = null;
+            try
+            {
+                g2C_EnterGame = (G2C_EnterGame)await gateSession.Call(new C2G_EnterGame() { });
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+                zoneScene.GetComponent<SessionComponent>().Session?.Dispose();
+                return ErrorCode.ERR_NetWorkError;
+            }
+
+            if (g2C_EnterGame.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(g2C_EnterGame.Error.ToString());
+                return g2C_EnterGame.Error;
+            }
+            Log.Debug("角色进入游戏成功!!");
+
+            return ErrorCode.ERR_Success;
         }
     }
 }

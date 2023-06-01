@@ -8,7 +8,7 @@ namespace ET
 {
     public class C2R_LoginRealmHandler : AMRpcHandler<C2R_LoginRealm, R2C_LoginRealm>
     {
-        protected override async  ETTask Run(Session session, C2R_LoginRealm request, R2C_LoginRealm response, Action reply)
+        protected override async ETTask Run(Session session, C2R_LoginRealm request, R2C_LoginRealm response, Action reply)
         {
             if (session.DomainScene().SceneType != SceneType.Realm)
             {
@@ -16,7 +16,7 @@ namespace ET
                 session.Dispose();
                 return;
             }
-            Scene domainScene =session.DomainScene();
+            Scene domainScene = session.DomainScene();
 
             //防止多次点击登录
             if (session.GetComponent<SessionLockingComponent>() != null)
@@ -46,7 +46,7 @@ namespace ET
                 {
                     //取模固定分配一个Gate
                     //domainScene.Zone 一服 看配置表都是1
-                    StartSceneConfig config = RealmGateAddressHelper.GetGate(domainScene.Zone,request.AccountId);
+                    StartSceneConfig config = RealmGateAddressHelper.GetGate(domainScene.Zone, request.AccountId);
 
                     //进程之间消息发送可以用MessageHelper
                     //同Gate请求一个key,客户端可以拿着这个Key请求gate

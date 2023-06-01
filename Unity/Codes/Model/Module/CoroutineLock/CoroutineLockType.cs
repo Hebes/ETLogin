@@ -22,6 +22,7 @@ namespace ET
 
         public const int LoginRealm = 13;//登录Realm锁
         public const int LoginGate = 14;//登录Gate锁
+        public const int LoginCenterLock = 15;//登录中心服锁
 
 
         public const int Max = 100; // 这个必须最大

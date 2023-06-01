@@ -43,5 +43,23 @@ namespace ET
         public const int ERR_ConnectGateKeyError = 200013;
         /// <summary> 请求的场景错误 </summary>
         public const int ERR_RequestSceneTypeError = 200014;
+        /// <summary> 其他账号登录错误 </summary>
+        public const int ERR_OtherAccountLoginError = 200015;
+
+        /// <summary> 会话玩家错误 </summary>
+        public const int ERR_SessionPlayerError = 200016;
+        /// <summary> 没有玩家错误 </summary>
+        public const int ERR_NonePlayerError = 200017;
+        /// <summary> 玩家会话错误 </summary>
+        public const int ERR_PlayerSessionError = 200018;
+        /// <summary> 会话状态错误 </summary>
+        public const int ERR_SessionStateError = 200019;
+        /// <summary> 进入游戏错误 </summary>
+        public const int ERR_EnterGameError = 200020;
+        /// <summary> 重新进入游戏失败 </summary>
+        public const int ERR_ReEnterGameError = 200021;
+        /// <summary> 重新进入游戏失败2 </summary>
+        public const int ERR_ReEnterGameError2 = 200022;
+
     }
 }

@@ -860,6 +860,11 @@ namespace ET
             return component as K;
         }
         
+        /// <summary>
+        /// 创建实体
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public Entity AddChild(Entity entity)
         {
             entity.Parent = this;

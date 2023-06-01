@@ -8,6 +8,8 @@
         public const int ActorLocationSenderChecker = 2;
         public const int ActorMessageSenderChecker = 3;
 
+        /// <summary> 玩家离线超时时间 </summary>
+        public const int PlayerOfflineOutTime = 4;
         // 不能超过1000
     }
 }
